@@ -1,0 +1,6 @@
+## Interface: 70200
+## Title: |cff64b4ffFrom Scratch|r Grid SmartColor™
+## Notes: Encounter Specific Unit Coloring
+## Dependencies: Grid, FS_Core
+
+FS_GridSmartColor.lua
