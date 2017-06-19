@@ -1,4 +1,5 @@
 local GridStatusSmartColor = Grid:GetModule("GridStatus"):NewModule("GridStatusSmartColor")
+GSSC = GridStatusSmartColor
 
 GridStatusSmartColor.defaultDB = {
 	smart_color = {
@@ -8,6 +9,9 @@ GridStatusSmartColor.defaultDB = {
 		priority = 90,
 	}
 }
+
+local filters = {}
+local currentKeys = {}
 
 function GridStatusSmartColor:PostInitialize()
 	self:RegisterStatus("smart_color", "SmartColor™", nil, true)
@@ -26,27 +30,59 @@ function GridStatusSmartColor:OnStatusDisable(status)
 	end
 end
 
+function GridStatusSmartColor:RegisterFilter(filter)
+	filters[filter] = true
+end
+
+function GridStatusSmartColor:UnregisterFilter(filter)
+	filters[filter] = nil
+end
+
 function GridStatusSmartColor:FS_MSG_GSSC(msg)
 	local action = msg.action
+	local key = msg.key
+	if key then
+		for filter in pairs(filters) do
+			if filter:SmartColorFilter(key) == false then
+				return
+			end
+		end
+	end
 	if action == "set" then
-		self:Set(msg.guid, msg.color)
+		self:Set(key, msg.guid, msg.color)
 	elseif action == "unset" then
-		self:Unset(msg.guid)
+		self:Unset(key, msg.guid)
 	elseif action == "unsetall" then
-		self:UnsetAll()
+		self:UnsetAll(key)
 	end
 end
 
-function GridStatusSmartColor:Set(guid, color)
+function GridStatusSmartColor:Set(key, guid, color)
+	currentKeys[guid] = key
 	self.core:SendStatusGained(guid, "smart_color", self.db.profile.smart_color.priority, nil, color)
 end
 
-function GridStatusSmartColor:Unset(guid)
-	self.core:SendStatusLost(guid, "smart_color")
+function GridStatusSmartColor:Unset(key, guid)
+	if currentKeys[guid] and currentKeys[guid] == key then
+		currentKeys[guid] = nil
+		self.core:SendStatusLost(guid, "smart_color")
+	end
 end
 
-function GridStatusSmartColor:UnsetAll()
-	self.core:SendStatusLostAllUnits("smart_color")
+function GridStatusSmartColor:UnsetAll(key)
+	if key then
+		local removed = {}
+		for guid, k in pairs(currentKeys) do
+			if k == key then
+				self.core:SendStatusLost(guid, "smart_color")
+				removed[#removed + 1] = guid
+			end
+		end
+		for _, guid in ipairs(removed) do
+			currentKeys[guid] = nil
+		end
+	else
+		self.core:SendStatusLostAllUnits("smart_color")
+		wipe(currentKeys)
+	end
 end
-
-GSSC = GridStatusSmartColor
