@@ -38,17 +38,17 @@ function GridStatusSmartColor:UnregisterFilter(filter)
 	filters[filter] = nil
 end
 
-function GridStatusSmartColor:FS_MSG_GSSC(msg)
+function GridStatusSmartColor:FS_MSG_GSSC(_, msg)
 	local action = msg.action
 	local key = msg.key
-	if key then
-		for filter in pairs(filters) do
-			if filter:SmartColorFilter(key) == false then
-				return
+	if action == "set" then
+		if key ~= nil then
+			for filter in pairs(filters) do
+				if filter:SmartColorFilter(key) == false then
+					return
+				end
 			end
 		end
-	end
-	if action == "set" then
 		self:Set(key, msg.guid, msg.color)
 	elseif action == "unset" then
 		self:Unset(key, msg.guid)
@@ -63,14 +63,14 @@ function GridStatusSmartColor:Set(key, guid, color)
 end
 
 function GridStatusSmartColor:Unset(key, guid)
-	if currentKeys[guid] and currentKeys[guid] == key then
+	if currentKeys[guid] == nil or currentKeys[guid] == key then
 		currentKeys[guid] = nil
 		self.core:SendStatusLost(guid, "smart_color")
 	end
 end
 
 function GridStatusSmartColor:UnsetAll(key)
-	if key then
+	if key ~= nil then
 		local removed = {}
 		for guid, k in pairs(currentKeys) do
 			if k == key then
