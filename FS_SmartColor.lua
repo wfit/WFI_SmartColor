@@ -1,5 +1,7 @@
 local _, Addon = ...
-SmartColor = LibStub("AceAddon-3.0"):NewAddon(Addon, "FS_SmartColor", "AceEvent-3.0")
+
+local SmartColor = LibStub("AceAddon-3.0"):NewAddon(Addon, "FS_SmartColor", "AceEvent-3.0")
+_G.SmartColor = SmartColor
 
 local filters = {}
 local currentKeys = {}
@@ -25,13 +27,6 @@ function SmartColor:FS_MSG_SMARTCOLOR(_, msg)
 	local action = msg.action
 	local key = msg.key
 	if action == "set" then
-		if key ~= nil then
-			for filter in pairs(filters) do
-				if filter:SmartColorFilter(key) == false then
-					return
-				end
-			end
-		end
 		self:Set(key, msg.guid, msg.color)
 	elseif action == "unset" then
 		self:Unset(key, msg.guid)
@@ -41,6 +36,13 @@ function SmartColor:FS_MSG_SMARTCOLOR(_, msg)
 end
 
 function SmartColor:Set(key, guid, color)
+	if key ~= nil then
+		for filter in pairs(filters) do
+			if filter:SmartColorFilter(key) == false then
+				return
+			end
+		end
+	end
 	currentKeys[guid] = key
 	for _, module in ipairs(modules) do
 		module:Set(guid, color)
