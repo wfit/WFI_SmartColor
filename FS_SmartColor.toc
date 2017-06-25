@@ -8,5 +8,4 @@
 FS_SmartColor.lua
 
 Grid.lua
-Healbot.lua
 Blizzard.lua
