@@ -3,8 +3,10 @@
 ## Notes: Encounter Specific Unit Coloring
 ## Dependencies: FS_Core
 ## OptionalDeps: Grid
+## X-FS-Addon: 1
 
 FS_SmartColor.lua
 
 Grid.lua
+Healbot.lua
 Blizzard.lua
