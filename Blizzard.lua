@@ -14,16 +14,16 @@ if not Grid then
 		self:Refresh()
 	end
 
+	function Blizz:UnsetAll()
+		wipe(colors)
+		self:Refresh()
+	end
+
 	local BACKDROP = {
 		bgFile = "Interface\\BUTTONS\\WHITE8X8", tile = true, tileSize = 8,
 		edgeFile = "Interface\\BUTTONS\\WHITE8X8", edgeSize = 1,
 		insets = { left = 1, right = 1, top = 1, bottom = 1 },
 	}
-
-	function Blizz:UnsetAll()
-		wipe(colors)
-		self:Refresh()
-	end
 
 	local function refresh(frame)
 		local unit = frame.unit
