@@ -4,7 +4,7 @@ local SmartColor = LibStub("AceAddon-3.0"):NewAddon(Addon, "FS_SmartColor", "Ace
 _G.SmartColor = SmartColor
 
 local filters = {}
-local currentKeys = {}
+local stacks = {}
 local modules = {}
 
 function SmartColor:OnInitialize()
@@ -35,6 +35,17 @@ function SmartColor:FS_MSG_SMARTCOLOR(_, msg)
 	end
 end
 
+local function removeEntryFromStack(guid, key)
+	for idx, entry in stacks[guid] do
+		local _, entryKey = unpack(entry)
+		if entryKey == key then
+			table.remove(stacks[guid], idx)
+			return true
+		end
+	end
+	return false
+end
+
 function SmartColor:Set(key, guid, color)
 	if key ~= nil then
 		for filter in pairs(filters) do
@@ -42,34 +53,40 @@ function SmartColor:Set(key, guid, color)
 				return
 			end
 		end
+		stacks[guid] = stacks[guid] or {}
+		removeEntryFromStack(guid, key)
+		table.insert(stacks[guid], { color, key })
 	end
-	currentKeys[guid] = key
 	for _, module in ipairs(modules) do
 		module:Set(guid, color)
 	end
 end
 
 function SmartColor:Unset(key, guid)
-	if currentKeys[guid] == nil or currentKeys[guid] == key then
-		currentKeys[guid] = nil
+	local stack = stacks[guid]
+	if stack and key ~= nil then
+		removeEntryFromStack(guid, key)
+	end
+	if stack and #stack > 0 then
+		local color = unpack(stack[#stack])
+		for _, module in ipairs(modules) do module:Set(guid, color) end
+	else
 		for _, module in ipairs(modules) do module:Unset(guid) end
+		stacks[guid] = nil
 	end
 end
 
 function SmartColor:UnsetAll(key)
 	if key ~= nil then
-		local removed = {}
-		for guid, k in pairs(currentKeys) do
-			if k == key then
-				for _, module in ipairs(modules) do module:Unset(guid) end
-				removed[#removed + 1] = guid
-			end
+		local guids = {}
+		for guid in pairs(stacks) do
+			table.insert(guids, guid)
 		end
-		for _, guid in ipairs(removed) do
-			currentKeys[guid] = nil
+		for _, guid in ipairs(guids) do
+			self:Unset(key, guid)
 		end
 	else
 		for _, module in ipairs(modules) do module:UnsetAll() end
-		wipe(currentKeys)
+		wipe(stacks)
 	end
 end
