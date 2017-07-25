@@ -36,7 +36,7 @@ function SmartColor:FS_MSG_SMARTCOLOR(_, msg)
 end
 
 local function removeEntryFromStack(guid, key)
-	for idx, entry in stacks[guid] do
+	for idx, entry in ipairs(stacks[guid]) do
 		local _, entryKey = unpack(entry)
 		if entryKey == key then
 			table.remove(stacks[guid], idx)
