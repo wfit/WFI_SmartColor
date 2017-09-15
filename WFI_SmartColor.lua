@@ -1,6 +1,6 @@
 local _, Addon = ...
 
-local SmartColor = LibStub("AceAddon-3.0"):NewAddon(Addon, "FS_SmartColor", "AceEvent-3.0")
+local SmartColor = LibStub("AceAddon-3.0"):NewAddon(Addon, "WFI_SmartColor", "AceEvent-3.0")
 _G.SmartColor = SmartColor
 
 local filters = {}
@@ -8,7 +8,7 @@ local stacks = {}
 local modules = {}
 
 function SmartColor:OnInitialize()
-	self:RegisterMessage("FS_MSG_SMARTCOLOR")
+	self:RegisterMessage("WFI_MSG_SMARTCOLOR")
 end
 
 function SmartColor:RegisterFilter(filter)
@@ -23,7 +23,7 @@ function SmartColor:RegisterModule(module)
 	modules[#modules + 1] = module
 end
 
-function SmartColor:FS_MSG_SMARTCOLOR(_, msg)
+function SmartColor:WFI_MSG_SMARTCOLOR(_, msg)
 	local action = msg.action
 	local key = msg.key
 	if action == "set" then
@@ -82,7 +82,7 @@ function SmartColor:UnsetAll(key)
 		for guid in pairs(stacks) do
 			table.insert(guids, guid)
 		end
-		for _, guid in ipairs(guids) do
+		for _wwwwwwwwwwwwwwwwwwwwwwwwwwwwee, guid in ipairs(guids) do
 			self:Unset(key, guid)
 		end
 	else
