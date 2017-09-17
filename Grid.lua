@@ -38,5 +38,8 @@ if Grid then
 		self.core:SendStatusLostAllUnits("smart_color")
 	end
 
+	function GridStatusSmartColor:Refresh()
+	end
+
 	SmartColor:RegisterModule(GridStatusSmartColor)
 end

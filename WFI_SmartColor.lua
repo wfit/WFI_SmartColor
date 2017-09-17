@@ -9,6 +9,7 @@ local modules = {}
 
 function SmartColor:OnInitialize()
 	self:RegisterMessage("WFI_MSG_SMARTCOLOR")
+	self:RegisterEvent("GROUP_ROSTER_UPDATE", "Refresh")
 end
 
 function SmartColor:RegisterFilter(filter)
@@ -82,11 +83,15 @@ function SmartColor:UnsetAll(key)
 		for guid in pairs(stacks) do
 			table.insert(guids, guid)
 		end
-		for _wwwwwwwwwwwwwwwwwwwwwwwwwwwwee, guid in ipairs(guids) do
+		for _, guid in ipairs(guids) do
 			self:Unset(key, guid)
 		end
 	else
 		for _, module in ipairs(modules) do module:UnsetAll() end
 		wipe(stacks)
 	end
+end
+
+function SmartColor:Refresh()
+	for _, module in ipairs(modules) do module:Refresh() end
 end

@@ -2,10 +2,11 @@
 ## Title: |cffe6494aWFI|r SmartColor™
 ## Notes: Encounter Specific Unit Coloring
 ## Dependencies: WFI_Core
-## OptionalDeps: Grid
+## OptionalDeps: Grid, ElvUI
 ## X-WFI-Addon: 1
 
 WFI_SmartColor.lua
 
 Grid.lua
+ElvUI.lua
 Blizzard.lua

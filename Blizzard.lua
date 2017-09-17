@@ -53,11 +53,5 @@ if not Grid then
 		CompactRaidFrameContainer_ApplyToFrames(CompactRaidFrameContainer, "normal", refresh)
 	end
 
-	local tracker = CreateFrame("Frame")
-	tracker:RegisterEvent("GROUP_ROSTER_UPDATE")
-	tracker:SetScript("OnEvent", function()
-		Blizz:Refresh()
-	end)
-
 	SmartColor:RegisterModule(Blizz)
 end
