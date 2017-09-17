@@ -52,12 +52,13 @@ if ElvUI then
 	end
 
 	function Elv:Refresh()
-		for i = 1, 30 do
-			local frame = _G["ElvUF_RaidGroup1UnitButton" .. i]
-			if frame and frame.unit and UnitExists(frame.unit) then
-				refresh(frame)
-			else
-				return
+		for i = 1, 6 do
+			local stop = (i == 1) and 30 or 5
+			for j = 1, stop do
+				local frame = _G["ElvUF_RaidGroup" .. i .. "UnitButton" .. j]
+				if frame and frame.unit and UnitExists(frame.unit) then
+					refresh(frame)
+				end
 			end
 		end
 	end
