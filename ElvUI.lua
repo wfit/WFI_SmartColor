@@ -1,5 +1,5 @@
 local _, SmartColor = ...
-if ElvUI then
+if ElvUI and not Grid then
 	local Elv = {}
 
 	local colors = {}
@@ -56,8 +56,11 @@ if ElvUI then
 			local stop = (i == 1) and 30 or 5
 			for j = 1, stop do
 				local frame = _G["ElvUF_RaidGroup" .. i .. "UnitButton" .. j]
-				if frame and frame.unit and UnitExists(frame.unit) then
+				if not frame then break end
+				if frame.unit and UnitExists(frame.unit) then
 					refresh(frame)
+				else
+					break
 				end
 			end
 		end
