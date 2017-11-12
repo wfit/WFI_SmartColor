@@ -8,7 +8,7 @@ local stacks = {}
 local modules = {}
 
 function SmartColor:OnInitialize()
-	self:RegisterMessage("WFI_MSG_SMARTCOLOR")
+	self:RegisterMessage("OKEN_MSG_SMARTCOLOR")
 	self:RegisterEvent("GROUP_ROSTER_UPDATE", "Refresh")
 end
 
@@ -24,7 +24,7 @@ function SmartColor:RegisterModule(module)
 	modules[#modules + 1] = module
 end
 
-function SmartColor:WFI_MSG_SMARTCOLOR(_, msg)
+function SmartColor:OKEN_MSG_SMARTCOLOR(_, msg)
 	local action = msg.action
 	local key = msg.key
 	if action == "set" then

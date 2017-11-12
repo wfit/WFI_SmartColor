@@ -1,7 +1,7 @@
 ## Interface: 70300
 ## Title: |cffe6494aWFI|r SmartColor™
 ## Notes: Encounter Specific Unit Coloring
-## Dependencies: WFI_Core
+## Dependencies: Oken_Core
 ## OptionalDeps: Grid, ElvUI
 ## X-WFI-Addon: 1
 
